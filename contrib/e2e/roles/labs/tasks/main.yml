@@ -3,9 +3,6 @@
   ansible.builtin.set_fact:
     genesis_host: "{{ groups['genesis'][0] }}"
 
-- name: Install dependencies
-  ansible.builtin.import_tasks: dependencies.yml
-
 - name: Create validator keys
   ansible.builtin.import_tasks: keygen.yml
   when: override_keygen | default(false)
@@ -17,10 +14,8 @@
   ansible.builtin.import_tasks: bootstrap.yml
   when: 
     - inventory_hostname == genesis_host
-    - is_bootstrap | default(false)
 
-- name: Run the join validator 
+- name: Join labs validators to existing cluster
   ansible.builtin.import_tasks: join.yml
   when: 
     - inventory_hostname != genesis_host
-    - is_join | default(false)

@@ -5,16 +5,17 @@
     labs_solana_cmd: "{{ labs_bindir }}/solana -u http://{{ labs_gossip_host }}:{{ labs_rpc_port }}"
 
 - name: Copy labs bootstrap validator template to system
+  become: yes
   ansible.builtin.template:
     src: labs_bootstrap_validator.service.j2
-    dest: /etc/systemd/system/labs_bootstrap_validator.service
-  become: yes
+    dest: /etc/systemd/system/fd_e2e_labs_bootstrap_validator.service
 
 - name: Start labs service if not already running
-  ansible.builtin.systemd:
-    name: labs_bootstrap_validator  
-    state: started
   become: yes
+  ansible.builtin.systemd:
+    name: fd_e2e_labs_bootstrap_validator
+    state: started
+    daemon_reload: true
 
 - name: Wait for snapshot
   ansible.builtin.shell: "{{ labs_solana_cmd }} epoch-info | grep -oP 'Slot: \\K\\d+'" 

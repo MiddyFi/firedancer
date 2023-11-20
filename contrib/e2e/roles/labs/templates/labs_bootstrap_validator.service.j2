@@ -3,7 +3,9 @@ Description=Solana Labs Bootstrap Validator
 After=network.target
 
 [Service]
-ExecStart={{ labs_validator }} \
+Type=simple
+ExecStart=/bin/bash -c 'ulimit -n 1000000 && \
+    {{ labs_validator }} \
     --identity {{ labs_bootstrap_keys_dir }}/id.json \
     --vote-account {{ labs_bootstrap_keys_dir }}/vote.json \
     --ledger {{ labs_ledger }} \
@@ -24,9 +26,6 @@ ExecStart={{ labs_validator }} \
     --full-rpc-api \
     --tpu-disable-quic \
     --tpu-enable-udp \
-    --log {{ labs_ledger }}/bootstrap_validator.log
-Restart=always
+    --log {{ labs_ledger }}/bootstrap_validator.log'
+Restart=on-failure
 RestartSec=10s
-
-[Install]
-WantedBy=multi-user.target

@@ -3,5 +3,5 @@
   hosts: genesis[0]
   gather_facts: yes 
   roles:
-    - roles/genesis
+    # - roles/genesis
     - roles/labs

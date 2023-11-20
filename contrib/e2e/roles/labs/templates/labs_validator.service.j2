@@ -1,9 +1,11 @@
 [Unit]
-Description=Solana Labs Join Validator
+Description=Solana Labs Validator
 After=network.target
 
 [Service]
-ExecStart={{ labs_validator }} \
+Type=simple
+ExecStart=/bin/bash -c 'ulimit -n 1000000 && \
+    {{ labs_validator }} \
     --allow-private-addr \
     --identity {{ labs_join_keys_dir }}/id.json \
     --ledger {{ labs_ledger }} \
@@ -14,9 +16,6 @@ ExecStart={{ labs_validator }} \
     --entrypoint {{ labs_solana_entrypoint }} \
     --rpc-port {{ labs_rpc_port }} \
     --full-rpc-api \
-    --log {{ labs_ledger }}/join_validator.log
-Restart=always
+    --log {{ labs_ledger }}/validator.log'
+Restart=on-falure
 RestartSec=10s
-
-[Install]
-WantedBy=multi-user.target
