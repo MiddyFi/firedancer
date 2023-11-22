@@ -16,10 +16,3 @@
     name: fd_e2e_labs_bootstrap_validator
     state: started
     daemon_reload: true
-
-- name: Wait for snapshot
-  ansible.builtin.shell: "{{ labs_solana_cmd }} epoch-info | grep -oP 'Slot: \\K\\d+'" 
-  register: slot_value
-  until: (slot_value.stdout | int) > labs_snapshot_interval
-  retries: 100
-  delay: 2

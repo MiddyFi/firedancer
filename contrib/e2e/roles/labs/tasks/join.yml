@@ -5,6 +5,17 @@
     labs_solana_entrypoint: "{{ hostvars[bootstrap_host]['labs_gossip_host'] }}:{{ labs_gossip_port }}"
     solana_cmd: "{{ labs_bindir }}/solana -u http://{{ hostvars[bootstrap_host]['labs_gossip_host'] }}:{{ labs_rpc_port }}"
 
+- name: Remove old ledger
+  become: yes
+  ansible.builtin.file:
+    path: "{{ labs_ledger }}"
+    state: absent
+
+- name: Create ledger
+  ansible.builtin.file:
+    path: "{{ labs_ledger }}"
+    state: directory
+
 - name: Copy labs join validator template to system
   become: yes
   ansible.builtin.template:
@@ -24,10 +35,6 @@
     -k {{ labs_keys_dir }}/id.json
     --allow-unsafe-authorized-withdrawer
     {{ labs_keys_dir }}/vote.json {{ labs_keys_dir }}/id.json {{ labs_keys_dir }}/id.json
-  register: slot_value
-  until: slot_value.rc == 0
-  retries: 5
-  delay: 1
 
 - name: Create stake account
   ansible.builtin.shell: >
