@@ -4,11 +4,11 @@
   ansible.builtin.slurp:
     src: "{{ genesis_cfg }}"
   register: genesis_yml
-  when: inventory_hostname == genesis_host
+  when: inventory_hostname == bootstrap_host
 
 - name: Parse into yaml facts
   ansible.builtin.set_fact:
-    genesis_yml: "{{ hostvars[genesis_host].genesis_yml.content | b64decode | from_yaml }}"
+    genesis_yml: "{{ hostvars[bootstrap_host].genesis_yml.content | b64decode | from_yaml }}"
 
 - name: Get host ip addresses
   ansible.builtin.setup:

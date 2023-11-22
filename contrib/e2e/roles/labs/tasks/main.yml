@@ -1,11 +1,16 @@
 ---
-- name: Set genesis host
+# bootstrap validator will always run on the box
+# where we created the genesis ledger
+- name: Set bootstrap validator host
   ansible.builtin.set_fact:
-    genesis_host: "{{ groups['genesis'][0] }}"
+    bootstrap_host: "{{ groups['genesis'][0] }}"
 
+# bootstrap keys were created during genesis
 - name: Create validator keys
   ansible.builtin.import_tasks: keygen.yml
-  when: override_keygen | default(false)
+  when:
+  - override_keygen | default(false)
+  - inventory_hostname != bootstrap_host
 
 - name: Gather cluster facts
   ansible.builtin.import_tasks: gather.yml
@@ -13,9 +18,15 @@
 - name: Run the bootstrap validator
   ansible.builtin.import_tasks: bootstrap.yml
   when: 
-    - inventory_hostname == genesis_host
+    - inventory_hostname == bootstrap_host
+
+- name: Fund non-bootstrap validator keys
+  ansible.builtin.import_tasks: fund.yml
+  when:
+    - override_keygen | default(false)
+    - inventory_hostname == bootstrap_host
 
 - name: Join labs validators to existing cluster
   ansible.builtin.import_tasks: join.yml
   when: 
-    - inventory_hostname != genesis_host
+    - inventory_hostname != bootstrap_host

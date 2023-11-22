@@ -18,4 +18,11 @@
   - "id"
   - "vote"
   - "stake"
-  when: inventory_hostname not in groups['genesis']
+
+- name: Get identity pubkey
+  ansible.builtin.shell: "{{ labs_keygen }} pubkey {{ labs_keys_dir }}/id.json"
+  register: identity
+
+- name: Set identity
+  ansible.builtin.set_fact:
+    validator_identity: "{{ identity.stdout }}"

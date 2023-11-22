@@ -1,8 +1,9 @@
 ---
 - name: Set solana validator and epoch info commands
   ansible.builtin.set_fact:
-    bootstrap_solana_cmd: "{{ labs_bindir }}/solana -u http://{{ labs_gossip_host }}:{{ labs_rpc_port }}"
-    join_solana_cmd: "{{ labs_bindir }}/solana -u http://127.0.0.1:{{ labs_rpc_port }}"
+    labs_validator: "{{ labs_bindir }}/solana-validator"
+    labs_solana_entrypoint: "{{ hostvars[bootstrap_host]['labs_gossip_host'] }}:{{ labs_gossip_port }}"
+    solana_cmd: "{{ labs_bindir }}/solana -u http://{{ hostvars[bootstrap_host]['labs_gossip_host'] }}:{{ labs_rpc_port }}"
 
 - name: Copy labs join validator template to system
   become: yes
@@ -10,45 +11,32 @@
     src: labs_validator.service.j2
     dest: /etc/systemd/system/fd_e2e_labs_validator.service
 
-- name: Start labs join service if not already running
+- name: Start labs service if not already running
   become: yes
   ansible.builtin.systemd:
-    name: labs_join_validator
+    name: fd_e2e_labs_validator
     state: started
     daemon_reload: true
 
-- name: Wait for vote on root slot
-  ansible.builtin.shell: "{{ bootstrap_solana_cmd }} vote-account {{ labs_keysdir }}/vote.json | grep -oP 'Root Slot: \\K.*$'" 
-  register: root_slot_value
-  until: root_slot_value.stdout != '~'
-  retries: 100
-  delay: 2
-
-- name: Transfer sol
-  ansible.builtin.shell: >
-    {{ join_solana_cmd }} transfer 
-    -k {{ labs_faucet }} 
-    --allow-unfunded-recipient 
-    {{ labs_keysdir }}/id.json {{ vote_sol }}
-
 - name: Create vote account
   ansible.builtin.shell: >
-    {{ join_solana_cmd }} create-vote-account 
-    -k {{ labs_keysdir }}/id.json 
-    --allow-unsafe-authorized-withdrawer 
-    {{ labs_keysdir }}/vote.json {{ labs_keysdir }}/id.json {{ labs_keysdir }}/id.json
+    {{ solana_cmd }} create-vote-account
+    -k {{ labs_keys_dir }}/id.json
+    --allow-unsafe-authorized-withdrawer
+    {{ labs_keys_dir }}/vote.json {{ labs_keys_dir }}/id.json {{ labs_keys_dir }}/id.json
+  register: slot_value
+  until: slot_value.rc == 0
+  retries: 5
+  delay: 1
 
 - name: Create stake account
   ansible.builtin.shell: >
-    {{ join_solana_cmd }} create-stake-account 
-    -k {{ labs_faucet }}  
-    --stake-authority {{ labs_faucet }} 
-    --withdraw-authority {{ labs_faucet }} 
-    {{ labs_keysdir }}/stake.json {{ stake_sol }}
+    {{ solana_cmd }} create-stake-account
+    -k {{ labs_keys_dir }}/id.json
+    {{ labs_keys_dir }}/stake.json {{ stake_sol }}
 
 - name: Delegate stake 
   ansible.builtin.shell: >
-    {{ join_solana_cmd }} delegate-stake 
-    -k {{ labs_faucet }} 
-    --stake-authority {{ labs_faucet }} 
-    {{ labs_keysdir }}/stake.json {{ labs_keysdir }}/vote.json
+    {{ solana_cmd }} delegate-stake
+    -k {{ labs_keys_dir }}/id.json
+    {{ labs_keys_dir }}/stake.json {{ labs_keys_dir }}/vote.json

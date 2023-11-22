@@ -10,6 +10,7 @@
 #     format: gz
 
 - name: Remove current ledger
+  become: yes
   ansible.builtin.file:
     path: "{{ ledger }}"
     state: absent

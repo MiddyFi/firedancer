@@ -7,7 +7,7 @@ Type=simple
 ExecStart=/bin/bash -c 'ulimit -n 1000000 && \
     {{ labs_validator }} \
     --allow-private-addr \
-    --identity {{ labs_join_keys_dir }}/id.json \
+    --identity {{ labs_keys_dir }}/id.json \
     --ledger {{ labs_ledger }} \
     --limit-ledger-size {{ labs_ledger_size }} \
     --dynamic-port-range {{ labs_port_start }}-{{ labs_port_end }} \
