@@ -1,0 +1,50 @@
+---
+- name: Set solana command
+  ansible.builtin.set_fact:
+    solana_cmd: "{{ labs_bindir }}/solana -u http://{{ hostvars[bootstrap_host]['gossip_host'] }}:{{ rpc_port }}"
+
+# Run the configure command when the system boots,
+# each time before the validator is started,
+# and whenever the configuration file changes
+- name: Remove old ledger
+  become: yes
+  ansible.builtin.file:
+    path: "{{ ledger }}"
+    state: absent
+
+- name: Create ledger
+  ansible.builtin.file:
+    path: "{{ ledger }}"
+    state: directory
+
+- name: Copy firedancer service template to system
+  become: yes
+  ansible.builtin.template:
+    src: firedancer_validator.service.j2
+    dest: /etc/systemd/system/fd_e2e_firedancer_validator.service
+
+- name: Start firedancer service if not already running
+  become: yes
+  ansible.builtin.systemd:
+    name: fd_e2e_firedancer_validator
+    state: started
+    daemon_reload: true
+
+- name: Create vote account
+  ansible.builtin.shell: >
+    {{ solana_cmd }} create-vote-account
+    -k {{ keys_dir }}/id.json
+    --allow-unsafe-authorized-withdrawer
+    {{ keys_dir }}/vote.json {{ keys_dir }}/id.json {{ keys_dir }}/id.json
+
+- name: Create stake account
+  ansible.builtin.shell: >
+    {{ solana_cmd }} create-stake-account
+    -k {{ keys_dir }}/id.json
+    {{ keys_dir }}/stake.json {{ stake_sol }}
+
+- name: Delegate stake
+  ansible.builtin.shell: >
+    {{ solana_cmd }} delegate-stake
+    -k {{ keys_dir }}/id.json
+    {{ keys_dir }}/stake.json {{ keys_dir }}/vote.json

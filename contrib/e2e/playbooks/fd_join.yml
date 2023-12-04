@@ -1,6 +1,6 @@
 ---
 - name: Setup firedancer on hosts
-  hosts: fd_run
+  hosts: fd_run:genesis
   gather_facts: no
   roles:
     - roles/firedancer

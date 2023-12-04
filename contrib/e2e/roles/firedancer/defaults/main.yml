@@ -1,11 +1,27 @@
 ---
-fd_workdir: "{{ e2e_workdir }}/firedancer/{{ fd_repo_version }}"
+labs_bindir: "{{ e2e_workdir }}/solana/{{ labs_repo_version }}"
+fd_bindir: "{{ e2e_workdir }}/firedancer/{{ fd_repo_version }}"
+
+genesis_cfg: "{{ e2e_workdir }}/genesis.yml"
+keys_dir: "{{ e2e_workdir }}/keys"
+
+bootstrap_keys_dir: "{{ e2e_workdir }}/bootstrap-keys"
+faucet: "{{ bootstrap_keys_dir }}/faucet.json"
 
 fd_bin: fdctl
-fd_config_dir: "{{ fd_workdir }}/config"
-fd_config_file: "fd_config.toml"
-# TODO: define these or pass them as vars on the cmd line
+fd_config_file: "{{ e2e_workdir }}/fd_config.toml"
 fd_user: "{{ ansible_user }}"
-fd_group: "{{ ansible_user_gid }}"
-fd_identity_keypair:
-fd_vote_keypair:
+fd_identity_keypair: "{{ keys_dir }}/id.json"
+fd_vote_keypair: "{{ keys_dir }}/vote.json"
+
+ledger: "{{ e2e_workdir }}/ledger"
+ledger_size: 100000000
+gossip_port: 8001
+port_start: 8100
+port_end: 8200
+rpc_port: 8899
+interface: bond0
+
+id_sol: 500
+vote_sol: 10
+stake_sol: 30

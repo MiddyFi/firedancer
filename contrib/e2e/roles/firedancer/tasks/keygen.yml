@@ -1,0 +1,28 @@
+---
+- name: Set solana keygen binary
+  ansible.builtin.set_fact:
+    labs_keygen: "{{ labs_bindir }}/solana-keygen"
+
+- name: Create keys directory
+  ansible.builtin.file:
+    path: "{{ keys_dir }}"
+    state: directory
+
+- name: Create validator keys
+  ansible.builtin.shell: "{{ labs_keygen }} new --no-bip39-passphrase --force -o {{ keys_dir }}/{{ item }}.json > {{ keys_dir }}/{{ item }}.seed"
+  args:
+    creates:
+      - "{{ keys_dir }}/{{ item }}.json"
+      - "{{ keys_dir }}/{{ item }}.seed"
+  loop:
+  - "id"
+  - "vote"
+  - "stake"
+
+- name: Get identity pubkey
+  ansible.builtin.shell: "{{ labs_keygen }} pubkey {{ keys_dir }}/id.json"
+  register: identity
+
+- name: Set identity
+  ansible.builtin.set_fact:
+    validator_identity: "{{ identity.stdout }}"

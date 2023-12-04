@@ -1,0 +1,39 @@
+---
+- name: Set bootstrap validator host
+  ansible.builtin.set_fact:
+    bootstrap_host: "{{ groups['genesis'][0] }}"
+
+- name: Stop firedancer validator service
+  become: yes
+  ansible.builtin.systemd:
+    name: fd_e2e_firedancer_validator
+    state: stopped
+  when: inventory_hostname != bootstrap_host
+
+- name: Stop firedancer bootstrap validator service
+  become: yes
+  ansible.builtin.systemd:
+    name: fd_e2e_firedancer_bootstrap_validator
+    state: stopped
+  when: inventory_hostname == bootstrap_host
+
+# delete service unit files and ledger
+- name: Remove ledger
+  become: yes
+  ansible.builtin.file:
+    path: "{{ ledger }}"
+    state: absent
+
+- name: Remove firedancer systemd unit file
+  become: yes
+  ansible.builtin.file:
+    path: /etc/systemd/system/fd_e2e_firedancer_validator.service
+    state: absent
+  when: inventory_hostname != bootstrap_host
+
+- name: Remove firedancer bootstrap systemd unit
+  become: yes
+  ansible.builtin.file:
+    path: /etc/systemd/system/fd_e2e_firedancer_bootstrap_validator.service
+    state: absent
+  when: inventory_hostname == bootstrap_host

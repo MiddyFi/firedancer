@@ -1,0 +1,13 @@
+---
+- name: Set solana command
+  ansible.builtin.set_fact:
+    bootstrap_solana_cmd: "{{ labs_bindir }}/solana -u http://{{ gossip_host }}:{{ rpc_port }}"
+
+- name: Transfer sol
+  ansible.builtin.shell: >
+    {{ bootstrap_solana_cmd }} transfer
+    -k {{ faucet }}
+    --allow-unfunded-recipient
+    {{ hostvars[item]['validator_identity'] }} {{ id_sol }}
+  loop: "{{ groups['fd_run'] }}"
+  when: item != bootstrap_host

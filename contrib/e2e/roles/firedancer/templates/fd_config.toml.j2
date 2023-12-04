@@ -1,18 +1,26 @@
 user = "{{ fd_user }}"
+dynamic_port_range = "{{ port_start }}-{{ port_end }}"
 
 [gossip]
     entrypoints = [
-{% for entrypoint in solana_entrypoints %}
-      {{ entrypoint }},
-{% endfor %}
+      "{{ fd_entrypoint }}",
     ]
+
+[rpc]
+    port = {{ rpc_port }}
+    full_api = true
+
+[ledger]
+    path = "{{ ledger }}"
+    limit_size = {{ ledger_size }}
 
 [consensus]
     identity_path = "{{ fd_identity_keypair }}"
     vote_account_path = "{{ fd_vote_keypair }}"
+    poh_speed_test = false
+    os_network_limits_test = false
 
-    known_validators = [
-{% for val in solana_validators %}
-      {{ val }},
-{% endfor %}
-    ]
+    expected_genesis_hash = "{{ genesis_yml.genesis_hash }}"
+
+[log]
+    path = "{{ ledger }}/validator.log"

@@ -1,16 +1,12 @@
 ---
-- name: Create config directory
-  ansible.builtin.file:
-    state: directory
-    group: "{{ fd_user }}"
-    owner: "{{ fd_user }}"
-    mode: 0755
-    dest: "{{ fd_config_dir }}"
+- name: Set cluster entrypoint
+  ansible.builtin.set_fact:
+    fd_entrypoint: "{{ hostvars[bootstrap_host]['gossip_host'] }}:{{ gossip_port }}"
 
 - name: Copy the config file
   ansible.builtin.template:
     src: fd_config.toml.j2
-    dest: "{{ fd_config_dir }}/{{ fd_config_file }}"
+    dest: "{{ fd_config_file }}"
     owner: "{{ fd_user }}"
     group: "{{ fd_user }}"
     mode: 0644
