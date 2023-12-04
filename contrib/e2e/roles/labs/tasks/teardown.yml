@@ -21,7 +21,7 @@
 - name: Remove ledger
   become: yes
   ansible.builtin.file:
-    path: "{{ labs_ledger }}"
+    path: "{{ ledger }}"
     state: absent
 
 - name: Remove labs systemd unit file

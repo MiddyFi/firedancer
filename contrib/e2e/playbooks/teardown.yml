@@ -1,0 +1,17 @@
+---
+- name: Teardown solana labs validators
+  hosts: fd_run:labs_run
+  gather_facts: no
+
+  tasks:
+  - name: Start the solana labs bootstrap validator
+    ansible.builtin.include_role:
+      name: roles/labs
+      tasks_from: teardown
+    when: inventory_hostname in groups['labs_run']
+
+  - name: Start the firedancer bootstrap validator
+    ansible.builtin.include_role:
+      name: roles/firedancer
+      tasks_from: teardown
+    when: inventory_hostname in groups['fd_run']

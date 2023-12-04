@@ -1,6 +1,6 @@
 ---
-- name: Setup solana labs on hosts
-  hosts: labs_run
+- name: Setup solana labs validators on hosts
+  hosts: labs_run:genesis
   gather_facts: no
   roles:
     - roles/labs

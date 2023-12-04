@@ -5,22 +5,22 @@
 
 - name: Create keys directory
   ansible.builtin.file:
-    path: "{{ labs_keys_dir }}"
+    path: "{{ keys_dir }}"
     state: directory
 
 - name: Create validator keys
-  ansible.builtin.shell: "{{ labs_keygen }} new --no-bip39-passphrase --force -o {{ labs_keys_dir }}/{{ item }}.json > {{ labs_keys_dir }}/{{ item }}.seed"
+  ansible.builtin.shell: "{{ labs_keygen }} new --no-bip39-passphrase --force -o {{ keys_dir }}/{{ item }}.json > {{ keys_dir }}/{{ item }}.seed"
   args:
     creates:
-      - "{{ labs_keys_dir }}/{{ item }}.json"
-      - "{{ labs_keys_dir }}/{{ item }}.seed"
+      - "{{ keys_dir }}/{{ item }}.json"
+      - "{{ keys_dir }}/{{ item }}.seed"
   loop:
   - "id"
   - "vote"
   - "stake"
 
 - name: Get identity pubkey
-  ansible.builtin.shell: "{{ labs_keygen }} pubkey {{ labs_keys_dir }}/id.json"
+  ansible.builtin.shell: "{{ labs_keygen }} pubkey {{ keys_dir }}/id.json"
   register: identity
 
 - name: Set identity

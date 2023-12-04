@@ -62,7 +62,7 @@
       build_host: "{{ labs_build_host }}"
       run_group: "genesis"
 
-  - name: Copy solana-genesis binary
+  - name: Copy solana and solana-keygen binary
     ansible.builtin.include_tasks: distribute.yml
     vars:
       workdir: "{{ e2e_workdir }}/solana/{{ labs_repo_version }}"

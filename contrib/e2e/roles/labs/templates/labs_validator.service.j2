@@ -7,16 +7,16 @@ Type=simple
 ExecStart=/bin/bash -c 'ulimit -n 1000000 && \
     {{ labs_validator }} \
     --allow-private-addr \
-    --identity {{ labs_keys_dir }}/id.json \
-    --vote-account {{ labs_keys_dir }}/vote.json \
-    --ledger {{ labs_ledger }} \
-    --limit-ledger-size {{ labs_ledger_size }} \
-    --dynamic-port-range {{ labs_port_start }}-{{ labs_port_end }} \
+    --identity {{ keys_dir }}/id.json \
+    --vote-account {{ keys_dir }}/vote.json \
+    --ledger {{ ledger }} \
+    --limit-ledger-size {{ ledger_size }} \
+    --dynamic-port-range {{ port_start }}-{{ port_end }} \
     --no-poh-speed-test \
     --no-os-network-limits-test \
-    --entrypoint {{ labs_solana_entrypoint }} \
-    --rpc-port {{ labs_rpc_port }} \
+    --entrypoint {{ solana_entrypoint }} \
+    --rpc-port {{ rpc_port }} \
     --full-rpc-api \
-    --log {{ labs_ledger }}/validator.log'
+    --log {{ ledger }}/validator.log'
 Restart=on-falure
 RestartSec=10s

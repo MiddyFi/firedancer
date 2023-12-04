@@ -1,22 +1,20 @@
 ---
 genesis_cfg: "{{ e2e_workdir }}/genesis.yml"
-labs_keys_dir: "{{ e2e_workdir }}/keys"
+keys_dir: "{{ e2e_workdir }}/keys"
 
 labs_repo_version: "v1.17.4"
 labs_bindir: "{{ e2e_workdir }}/solana/{{ labs_repo_version }}"
-labs_bootstrap_keys_dir: "{{ e2e_workdir }}/bootstrap-keys"
-labs_faucet: "{{ labs_bootstrap_keys_dir }}/faucet.json"
-labs_authority: "{{ labs_bootstrap_keys_dir }}/authority.json"
-labs_ledger: "{{ e2e_workdir }}/ledger"
 
-labs_snapshot_interval: 200
-labs_ledger_size: 100000000
-labs_port_start: 8100
-labs_port_end: 8200
-labs_gossip_port: 8001
-labs_rpc_port: 8899
-labs_interface: bond0
+bootstrap_keys_dir: "{{ e2e_workdir }}/bootstrap-keys"
+faucet: "{{ bootstrap_keys_dir }}/faucet.json"
 
-labs_sol: 500
+ledger: "{{ e2e_workdir }}/ledger"
+ledger_size: 100000000
+port_start: 8100
+port_end: 8200
+gossip_port: 8001
+rpc_port: 8899
+interface: bond0
+id_sol: 500
 vote_sol: 10
 stake_sol: 30

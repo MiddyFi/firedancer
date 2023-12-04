@@ -17,4 +17,4 @@
 
 - name: Set gossip host ip
   ansible.builtin.set_fact:
-    labs_gossip_host: "{{ ip_addresses['ansible_facts']['ansible_' + labs_interface]['ipv4']['address'] }}"
+    gossip_host: "{{ ip_addresses['ansible_facts']['ansible_' + interface]['ipv4']['address'] }}"

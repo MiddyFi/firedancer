@@ -2,18 +2,18 @@
 - name: Set solana validator and epoch info commands
   ansible.builtin.set_fact:
     labs_validator: "{{ labs_bindir }}/solana-validator"
-    labs_solana_entrypoint: "{{ hostvars[bootstrap_host]['labs_gossip_host'] }}:{{ labs_gossip_port }}"
-    solana_cmd: "{{ labs_bindir }}/solana -u http://{{ hostvars[bootstrap_host]['labs_gossip_host'] }}:{{ labs_rpc_port }}"
+    solana_entrypoint: "{{ hostvars[bootstrap_host]['gossip_host'] }}:{{ gossip_port }}"
+    solana_cmd: "{{ labs_bindir }}/solana -u http://{{ hostvars[bootstrap_host]['gossip_host'] }}:{{ rpc_port }}"
 
 - name: Remove old ledger
   become: yes
   ansible.builtin.file:
-    path: "{{ labs_ledger }}"
+    path: "{{ ledger }}"
     state: absent
 
 - name: Create ledger
   ansible.builtin.file:
-    path: "{{ labs_ledger }}"
+    path: "{{ ledger }}"
     state: directory
 
 - name: Copy labs join validator template to system
@@ -32,18 +32,18 @@
 - name: Create vote account
   ansible.builtin.shell: >
     {{ solana_cmd }} create-vote-account
-    -k {{ labs_keys_dir }}/id.json
+    -k {{ keys_dir }}/id.json
     --allow-unsafe-authorized-withdrawer
-    {{ labs_keys_dir }}/vote.json {{ labs_keys_dir }}/id.json {{ labs_keys_dir }}/id.json
+    {{ keys_dir }}/vote.json {{ keys_dir }}/id.json {{ keys_dir }}/id.json
 
 - name: Create stake account
   ansible.builtin.shell: >
     {{ solana_cmd }} create-stake-account
-    -k {{ labs_keys_dir }}/id.json
-    {{ labs_keys_dir }}/stake.json {{ stake_sol }}
+    -k {{ keys_dir }}/id.json
+    {{ keys_dir }}/stake.json {{ stake_sol }}
 
 - name: Delegate stake 
   ansible.builtin.shell: >
     {{ solana_cmd }} delegate-stake
-    -k {{ labs_keys_dir }}/id.json
-    {{ labs_keys_dir }}/stake.json {{ labs_keys_dir }}/vote.json
+    -k {{ keys_dir }}/id.json
+    {{ keys_dir }}/stake.json {{ keys_dir }}/vote.json

@@ -10,7 +10,7 @@
     build_labs: false
 
 - name: Build and distribute solana binaries
-  hosts: all
+  hosts: labs_build:labs_run:fd_run
   gather_facts: no
   become: no
   roles:

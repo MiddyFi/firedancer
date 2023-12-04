@@ -3,6 +3,10 @@
   ansible.builtin.set_fact:
     bootstrap_host: "{{ groups['genesis'][0] }}"
 
+# Check that dependencies are installed
+- name: Check dependencies
+  ansible.builtin.import_tasks: dependencies.yml
+
 - name: Gather genesis facts
   ansible.builtin.import_tasks: gather.yml
 
