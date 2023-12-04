@@ -5,6 +5,10 @@
   ansible.builtin.set_fact:
     bootstrap_host: "{{ groups['genesis'][0] }}"
 
+# Check that dependencies are installed
+- name: Check dependencies
+  ansible.builtin.import_tasks: dependencies.yml
+
 # bootstrap keys were created during genesis
 - name: Create validator keys
   ansible.builtin.import_tasks: keygen.yml

@@ -4,3 +4,20 @@
   gather_facts: yes 
   roles:
     - roles/genesis
+
+- name: Start the bootstrap validator
+  hosts: genesis[0]
+  gather_facts: no
+
+  tasks:
+  - name: Start the solana labs bootstrap validator
+    ansible.builtin.include_role:
+      name: roles/bootstrap
+      tasks_from: labs
+    when: groups['genesis'][0] in groups['labs_run']
+
+  - name: Start the firedancer bootstrap validator
+    ansible.builtin.include_role:
+      name: roles/bootstrap
+      tasks_from: fd
+    when: groups['genesis'][0] in groups['fd_run']

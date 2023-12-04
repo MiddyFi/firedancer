@@ -1,8 +1,14 @@
 ---
+- name: Set bootstrap validator host
+  ansible.builtin.set_fact:
+    bootstrap_host: "{{ groups['genesis'][0] }}"
+
+- name: Gather genesis facts
+  ansible.builtin.import_tasks: gather.yml
+
 - name: Set solana validator and solana commands
   ansible.builtin.set_fact:
     labs_validator: "{{ labs_bindir }}/solana-validator"
-    labs_solana_cmd: "{{ labs_bindir }}/solana -u http://{{ labs_gossip_host }}:{{ labs_rpc_port }}"
 
 - name: Copy labs bootstrap validator template to system
   become: yes

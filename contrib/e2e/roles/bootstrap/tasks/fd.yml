@@ -1,0 +1,6 @@
+---
+- name: Not implemented
+  ansible.builtin.debug:
+    msg: "This is not implemented yet!"
+
+- meta: end_play

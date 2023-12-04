@@ -1,7 +1,7 @@
 ---
 - name: Set solana keygen binary
   ansible.builtin.set_fact:
-    keygen: "{{ workdir }}/solana-keygen"
+    keygen: "{{ bindir }}/solana-keygen"
 
 - name: Create keys directory
   ansible.builtin.file:

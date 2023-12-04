@@ -1,6 +1,6 @@
 ---
 - name: Build and distribute firedancer binaries
-  hosts: fd_hosts:genesis
+  hosts: fd_build:fd_run
   gather_facts: no
   become: no
   roles:
@@ -10,7 +10,7 @@
     build_labs: false
 
 - name: Build and distribute solana binaries
-  hosts: labs_hosts:genesis
+  hosts: all
   gather_facts: no
   become: no
   roles:

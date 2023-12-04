@@ -1,2 +1,5 @@
 ---
 e2e_workdir: "/home/{{ ansible_user }}/fd_e2e"
+
+fd_repo_version: "main"
+labs_repo_version: "v1.17.7"

@@ -15,7 +15,7 @@ fd_machine: "native"
 
 # labs build
 labs_repo: "https://github.com/solana-labs/solana.git"
-labs_repo_version: "v1.17.4"
+labs_repo_version: "v1.17.7"
 labs_build_targets: "-p solana-cli -p solana-validator -p solana-genesis -p solana-bench-tps -p solana-keygen"
 labs_build_profile: "release"
 

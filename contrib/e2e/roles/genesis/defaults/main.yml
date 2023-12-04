@@ -2,6 +2,7 @@
 cluster_type: devnet
 
 workdir: "{{ e2e_workdir }}"
+bindir: "{{ e2e_workdir }}/solana/{{ labs_repo_version }}"
 
 keys_dir: "{{ workdir }}/bootstrap-keys"
 genesis_cfg: "{{ workdir }}/genesis.yml"

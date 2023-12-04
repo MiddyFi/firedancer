@@ -1,7 +1,7 @@
 ---
 - name: Set solana genesis binary
   ansible.builtin.set_fact:
-    genesis: "{{ workdir }}/solana-genesis"
+    genesis: "{{ bindir }}/solana-genesis"
 
 # - name: Archive current ledger
 #   ansible.builtin.archive:

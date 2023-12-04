@@ -54,18 +54,25 @@
       run_group: "labs_run"
 
   # TODO: this is kinda ugly
-  # Get the solana-{genesis, keygen} binary to the correct host
-  - name: Copy solana-genesis and keygen binary
+  - name: Copy solana-genesis binary
     ansible.builtin.include_tasks: distribute.yml
     vars:
-      workdir: "{{ e2e_workdir }}"
-      bin: "{{ hostvars[labs_build_host].labs_bin }}/{{ item }}"
+      workdir: "{{ e2e_workdir }}/solana/{{ labs_repo_version }}"
+      bin: "{{ hostvars[labs_build_host].labs_bin }}/solana-genesis"
       build_host: "{{ labs_build_host }}"
       run_group: "genesis"
+
+  - name: Copy solana-genesis binary
+    ansible.builtin.include_tasks: distribute.yml
+    vars:
+      workdir: "{{ e2e_workdir }}/solana/{{ labs_repo_version }}"
+      bin: "{{ hostvars[labs_build_host].labs_bin }}/{{ item }}"
+      build_host: "{{ labs_build_host }}"
+      run_group: "fd_run"
     loop:
-    - solana-genesis
+    - solana
     - solana-keygen
-  when: build_labs 
+  when: build_labs
 
 # Cleanup repo clones
 - name: Delete fd repo directory

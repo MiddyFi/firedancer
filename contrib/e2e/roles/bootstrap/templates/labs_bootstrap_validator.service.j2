@@ -6,11 +6,11 @@ After=network.target
 Type=simple
 ExecStart=/bin/bash -c 'ulimit -n 1000000 && \
     {{ labs_validator }} \
-    --identity {{ labs_bootstrap_keys_dir }}/id.json \
-    --vote-account {{ labs_bootstrap_keys_dir }}/vote.json \
-    --ledger {{ labs_ledger }} \
-    --limit-ledger-size {{ labs_ledger_size }} \
-    --dynamic-port-range {{ labs_port_start }}-{{ labs_port_end }} \
+    --identity {{ bootstrap_keys_dir }}/id.json \
+    --vote-account {{ bootstrap_keys_dir }}/vote.json \
+    --ledger {{ ledger }} \
+    --limit-ledger-size {{ ledger_size }} \
+    --dynamic-port-range {{ port_start }}-{{ port_end }} \
     --no-genesis-fetch \
     --no-snapshot-fetch \
     --no-poh-speed-test \
@@ -19,13 +19,13 @@ ExecStart=/bin/bash -c 'ulimit -n 1000000 && \
     --expected-genesis-hash {{ genesis_yml.genesis_hash }} \
     --no-wait-for-vote-to-start-leader \
     --incremental-snapshots \
-    --full-snapshot-interval-slots {{ labs_snapshot_interval }} \
-    --rpc-port {{ labs_rpc_port }} \
-    --gossip-port {{ labs_gossip_port }} \
-    --gossip-host {{ labs_gossip_host }} \
+    --full-snapshot-interval-slots {{ snapshot_interval }} \
+    --rpc-port {{ rpc_port }} \
+    --gossip-port {{ gossip_port }} \
+    --gossip-host {{ gossip_host }} \
     --full-rpc-api \
     --tpu-disable-quic \
     --tpu-enable-udp \
-    --log {{ labs_ledger }}/bootstrap_validator.log'
+    --log {{ ledger }}/bootstrap_validator.log'
 Restart=on-failure
 RestartSec=10s
