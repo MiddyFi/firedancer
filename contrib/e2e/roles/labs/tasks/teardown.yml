@@ -1,0 +1,39 @@
+---
+- name: Set bootstrap validator host
+  ansible.builtin.set_fact:
+    bootstrap_host: "{{ groups['genesis'][0] }}"
+
+- name: Stop labs validator service
+  become: yes
+  ansible.builtin.systemd:
+    name: fd_e2e_labs_validator
+    state: stopped
+  when: inventory_hostname != bootstrap_host
+
+- name: Stop labs bootstrap validator service
+  become: yes
+  ansible.builtin.systemd:
+    name: fd_e2e_labs_bootstrap_validator
+    state: stopped
+  when: inventory_hostname == bootstrap_host
+
+# delete service unit files and ledger
+- name: Remove ledger
+  become: yes
+  ansible.builtin.file:
+    path: "{{ labs_ledger }}"
+    state: absent
+
+- name: Remove labs systemd unit file
+  become: yes
+  ansible.builtin.file:
+    path: /etc/systemd/system/fd_e2e_labs_validator.service
+    state: absent
+  when: inventory_hostname != bootstrap_host
+
+- name: Remove labs bootstrap systemd unit
+  become: yes
+  ansible.builtin.file:
+    path: /etc/systemd/system/fd_e2e_labs_bootstrap_validator.service
+    state: absent
+  when: inventory_hostname == bootstrap_host

@@ -28,6 +28,6 @@ ansible-playbook -i inventory/dev.yml playbooks/build.yml -e "ansible_user=<USER
 - [ ] Bootstrap fd validator
 - [x] Bootstrap solana labs validator
 - [ ] Join fd validator
-- [ ] Join solana labs validator
+- [x] Join solana labs validator
 - [ ] Teardown fd validator
-- [ ] Teardown solana labs validator
+- [x] Teardown solana labs validator
