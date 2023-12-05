@@ -21,7 +21,7 @@ ansible-playbook -i inventory/dev.yml playbooks/build.yml -e "ansible_user=<USER
 
 ## Running
 
-Create a `inventory/dev.yml` file similar to `inventory/hosts.yml` and populate
+Create a `inventory/cluster.yml` file similar to `inventory/hosts.yml` and populate
 it with host information. The grouping should be as follows:
 
 * `all.hosts` - all hosts must be in here
@@ -29,16 +29,18 @@ it with host information. The grouping should be as follows:
 * `all.children.genesis.hosts` - cluster bootstrap node, should have only 1 host
 * `all.children.[fd|labs]_run.hosts` - firedancer and solana validator hosts, include the bootstrap node in the appropriate group here
 
+Make sure that the correct versions are set in `inventory/group_vars/all/main.yml`.
+
 ### Building the binaries
 
 ```
-ansible-playbook -i inventory/dev.yml playbooks/build.yml -e "ansible_user=<USER>"
+ansible-playbook -i inventory/cluster.yml playbooks/build.yml -e "ansible_user=<USER>"
 ```
 
 ### Bootstrapping the cluster
 
 ```
-ansible-playbook -i inventory/dev.yml playbooks/genesis_and_bootstrap.yml -e "ansible_user=<USER> override_keygen=true"
+ansible-playbook -i inventory/cluster.yml playbooks/genesis_and_bootstrap.yml -e "ansible_user=<USER> override_keygen=true"
 ```
 
 ### Joining other nodes
@@ -46,19 +48,19 @@ ansible-playbook -i inventory/dev.yml playbooks/genesis_and_bootstrap.yml -e "an
 Labs validators:
 
 ```
-ansible-playbook -i inventory/dev.yml playbooks/labs_join.yml -e "ansible_user=<USER> override_keygen=true"
+ansible-playbook -i inventory/cluster.yml playbooks/labs_join.yml -e "ansible_user=<USER> override_keygen=true"
 ```
 
 Firedancer validators:
 
 ```
-ansible-playbook -i inventory/dev.yml playbooks/fd_join.yml -e "ansible_user=<USER> override_keygen=true"
+ansible-playbook -i inventory/cluster.yml playbooks/fd_join.yml -e "ansible_user=<USER> override_keygen=true"
 ```
 
 ### Tearing everything down
 
 ```
-ansible-playbook -i inventory/dev.yml playbooks/teardown.yml -e "ansible_user=<USER>"
+ansible-playbook -i inventory/cluster.yml playbooks/teardown.yml -e "ansible_user=<USER>"
 ```
 
 ## To Dos
