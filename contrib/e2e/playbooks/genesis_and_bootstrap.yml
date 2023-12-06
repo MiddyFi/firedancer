@@ -1,9 +1,9 @@
 ---
-# - name: Create the genesis for the new cluster
-#   hosts: genesis[0]
-#   gather_facts: yes 
-#   roles:
-#     - roles/genesis
+- name: Create the genesis for the new cluster
+  hosts: genesis[0]
+  gather_facts: yes
+  roles:
+    - roles/genesis
 
 - name: Start the bootstrap validator
   hosts: genesis[0]
