@@ -15,8 +15,8 @@ dynamic_port_range = "{{ port_start }}-{{ port_end }}"
     limit_size = {{ ledger_size }}
 
 [consensus]
-    identity_path = "{{ fd_identity_keypair }}"
-    vote_account_path = "{{ fd_vote_keypair }}"
+    identity_path = "{{ keys_dir }}/id.json"
+    vote_account_path = "{{ keys_dir }}/vote.json"
     poh_speed_test = false
     os_network_limits_test = false
 

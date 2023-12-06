@@ -10,7 +10,7 @@ ledger: "{{ workdir }}/ledger"
 faucet: "{{ keys_dir }}/faucet.json"
 authority: "{{ keys_dir }}/authority.json"
 bootstrap_validator_lamports: 1000000000000
-bootstrap_validator_stake_lamports: 322828800000
+bootstrap_validator_stake_lamports: 32282880000
 faucet_lamports: 5000000000000000
 snapshot_interval: 200
 ledger_size: 100000000

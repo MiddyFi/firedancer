@@ -1,6 +1,32 @@
 ---
-- name: Not implemented
-  ansible.builtin.debug:
-    msg: "This is not implemented yet!"
+- name: Set bootstrap validator host
+  ansible.builtin.set_fact:
+    bootstrap_host: "{{ groups['genesis'][0] }}"
 
-- meta: end_play
+# Check that dependencies are installed
+- name: Check dependencies
+  ansible.builtin.import_tasks: dependencies.yml
+
+- name: Gather genesis facts
+  ansible.builtin.import_tasks: gather.yml
+
+- name: Copy the config file
+  ansible.builtin.template:
+    src: fd_bootstrap_config.toml.j2
+    dest: "{{ fd_config_file }}"
+    owner: "{{ fd_user }}"
+    group: "{{ fd_user }}"
+    mode: 0644
+
+- name: Copy firedancer bootstrap validator template to system
+  become: yes
+  ansible.builtin.template:
+    src: fd_bootstrap_validator.service.j2
+    dest: /etc/systemd/system/fd_e2e_firedancer_bootstrap_validator.service
+
+- name: Start firedancer service if not already running
+  become: yes
+  ansible.builtin.systemd:
+    name: fd_e2e_firedancer_bootstrap_validator
+    state: started
+    daemon_reload: true

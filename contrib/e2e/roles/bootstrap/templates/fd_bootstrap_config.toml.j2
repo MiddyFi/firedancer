@@ -1,0 +1,34 @@
+user = "{{ fd_user }}"
+dynamic_port_range = "{{ port_start }}-{{ port_end }}"
+
+[gossip]
+    port = {{ gossip_port }}
+    host = "{{ gossip_host }}"
+
+[rpc]
+    port = {{ rpc_port }}
+    full_api = true
+
+[ledger]
+    path = "{{ ledger }}"
+    limit_size = {{ ledger_size }}
+
+[consensus]
+    identity_path = "{{ bootstrap_keys_dir }}/id.json"
+    vote_account_path = "{{ bootstrap_keys_dir }}/vote.json"
+    
+    genesis_fetch = false
+    snapshot_fetch = false
+    poh_speed_test = false
+    os_network_limits_test = false
+    wait_for_vote_to_start_leader = false
+
+    expected_genesis_hash = "{{ genesis_yml.genesis_hash }}"
+    expected_shred_version = {{ genesis_yml.shred_version }}
+
+[snapshots]
+    incremental_snapshots = true
+    incremental_snapshot_interval_slots = {{ snapshot_interval }}
+
+[log]
+    path = "{{ ledger }}/validator.log"

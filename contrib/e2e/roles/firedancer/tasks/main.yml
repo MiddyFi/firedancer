@@ -22,9 +22,17 @@
     - override_keygen | default(false)
     - inventory_hostname == bootstrap_host
 
-# Import the templated config file
-- name: Import configuration
-  ansible.builtin.import_tasks: config.yml
+- name: Set cluster entrypoint
+  ansible.builtin.set_fact:
+    fd_entrypoint: "{{ hostvars[bootstrap_host]['gossip_host'] }}:{{ gossip_port }}"
+
+- name: Copy the config file
+  ansible.builtin.template:
+    src: fd_config.toml.j2
+    dest: "{{ fd_config_file }}"
+    owner: "{{ fd_user }}"
+    group: "{{ fd_user }}"
+    mode: 0644
 
 - name: Join firedancer validators to existing cluster
   ansible.builtin.import_tasks: join.yml

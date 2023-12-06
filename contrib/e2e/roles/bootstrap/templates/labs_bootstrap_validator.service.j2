@@ -24,8 +24,6 @@ ExecStart=/bin/bash -c 'ulimit -n 1000000 && \
     --gossip-port {{ gossip_port }} \
     --gossip-host {{ gossip_host }} \
     --full-rpc-api \
-    --tpu-disable-quic \
-    --tpu-enable-udp \
     --log {{ ledger }}/bootstrap_validator.log'
 Restart=on-failure
 RestartSec=10s

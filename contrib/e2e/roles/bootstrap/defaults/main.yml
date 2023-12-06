@@ -2,6 +2,12 @@
 labs_repo_version: "v1.17.7"
 labs_bindir: "{{ e2e_workdir }}/solana/{{ labs_repo_version }}"
 
+fd_repo_version: "main"
+fd_bindir: "{{ e2e_workdir }}/firedancer/{{ fd_repo_version }}"
+fd_bin: "fdctl"
+fd_config_file: "{{ e2e_workdir }}/fd_bootstrap_config.toml"
+fd_user: "{{ ansible_user }}"
+
 genesis_cfg: "{{ e2e_workdir }}/genesis.yml"
 bootstrap_keys_dir: "{{ e2e_workdir }}/bootstrap-keys"
 faucet: "{{ bootstrap_keys_dir }}/faucet.json"

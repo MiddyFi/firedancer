@@ -11,8 +11,6 @@ faucet: "{{ bootstrap_keys_dir }}/faucet.json"
 fd_bin: fdctl
 fd_config_file: "{{ e2e_workdir }}/fd_config.toml"
 fd_user: "{{ ansible_user }}"
-fd_identity_keypair: "{{ keys_dir }}/id.json"
-fd_vote_keypair: "{{ keys_dir }}/vote.json"
 
 ledger: "{{ e2e_workdir }}/ledger"
 ledger_size: 100000000
