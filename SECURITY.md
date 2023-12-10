@@ -19,4 +19,4 @@ As these 3rd party audits are completed and issues are sufficiently addressed, w
 
 We are in the process of designing a **bug bounty program** for Firedancer.
 
-In the mean-time, if you find a security issue in Firedancer, we ask that you reach out to our team via Discord.
+In the meantime, if you find a security issue in Firedancer, we ask that you reach out to our team via Discord.
